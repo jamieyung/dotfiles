@@ -56,7 +56,7 @@ Plug 'tpope/vim-surround'
 " Show number and index of search matches
 Plug 'google/vim-searchindex'
 
-Plug 'neoclide/coc.nvim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Haxe
 Plug 'jdonaldson/vaxe'
