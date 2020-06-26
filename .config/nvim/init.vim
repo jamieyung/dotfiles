@@ -31,9 +31,6 @@ Plug 'vim-airline/vim-airline-themes'
 " Git gutter
 Plug 'airblade/vim-gitgutter'
 
-" Language server support for purescript
-Plug 'frigoeu/psc-ide-vim'
-
 " Search
 Plug 'junegunn/fzf', { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'

@@ -1,4 +1,5 @@
 {
+    "coc.source.file.ignoreHidden": false,
     "languageserver": {
         "haxe": {
             "command": "node",
@@ -11,6 +12,21 @@
             "settings": {
                 "haxe.executable": "haxe"
             }
+        },
+        "purescript": {
+            "command": "purescript-language-server",
+            "args": ["--stdio"],
+            "filetypes": ["purescript"],
+            "trace.server": "verbose",
+            "settings": {
+                "purescript": {
+                    "packagePath": ".spago",
+                    "addPscPackageSources": true,
+                    "addSpagoSources": true,
+                    "buildCommand": "spago build -- --json-errors"
+                }
+            },
+            "rootPatterns": ["bower.json", "psc-package.json", "spago.dhall"]
         }
     }
 }
