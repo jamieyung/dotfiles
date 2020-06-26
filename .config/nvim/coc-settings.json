@@ -1,0 +1,16 @@
+{
+    "languageserver": {
+        "haxe": {
+            "command": "node",
+            "args": ["/mnt/c/Users/hb/.vscode/extensions/nadako.vshaxe-2.20.3/bin/server.js"],
+            "filetypes": ["haxe"],
+            "trace.server": "verbose",
+            "initializationOptions": {
+                "displayArguments": ["build.hxml"]
+            },
+            "settings": {
+                "haxe.executable": "haxe"
+            }
+        }
+    }
+}
