@@ -1,10 +1,12 @@
-" set the leader key
+" set the fold method for this file
+" vim:foldmethod=marker
+
+" set the leader key {{{ ======================================================
 let mapleader = " "
+" }}}
 
-" -----------------------------------------------------------------------------
-" -- vim-plug -----------------------------------------------------------------
-" -----------------------------------------------------------------------------
-
+" Plugins {{{ =================================================================
+" vim-plug {{{2 ===============================================================
 " after adding plugins below, install with:
 " :source %
 " :PlugInstall
@@ -53,21 +55,22 @@ Plug 'tpope/vim-surround'
 " Show number and index of search matches
 Plug 'google/vim-searchindex'
 
+" Autocomplete
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Haxe
 Plug 'jdonaldson/vaxe'
 
+Plug 'yannick-cw/vimzoom'
+
 call plug#end()
+"}}}2
 
-" -----------------------------------------------------------------------------
-" -- Plugin config ------------------------------------------------------------
-" -----------------------------------------------------------------------------
-
-" vim-tmux-navigator
+" vim-tmux-navigator config {{{2 ==============================================
 let g:tmux_navigator_disable_when_zoomed = 1
 let g:tmux_navigator_save_on_switch = 1
 let g:tmux_navigator_no_mappings = 1 "use custom mappings below
+
 " Meta + direction to move between splits in any mode.
 " On Mac, make sure "Use Option as Meta key" is enabled.
 tnoremap <M-h> <C-\><C-N>:TmuxNavigateLeft<CR>
@@ -84,37 +87,88 @@ nnoremap <M-h> :TmuxNavigateLeft<CR>
 nnoremap <M-j> :TmuxNavigateDown<CR>
 nnoremap <M-k> :TmuxNavigateUp<CR>
 nnoremap <M-l> :TmuxNavigateRight<CR>
+" }}}2
 
-" NERDTree - Map <leader>n to opening NERDTree
-nnoremap <leader>n :NERDTreeToggle<CR>
+" vim-airline config {{{2 =====================================================
+let g:airline#extensions#branch#displayed_head_limit = 10 " truncates branch names to 10
+" }}}2
 
-" NERDTree - Open NERDTree when vim starts up on opening a directory
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
-
-" NERDTree - Close vim if the only window left open is a NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" gitgutter
+" gitgutter config {{{2 =======================================================
 let g:gitgutter_map_keys = 0
 
-" fzf.vim
+" git-gutter uses the sign gutter
+set signcolumn=yes
+" }}}2
+
+" fzf.vim config {{{2 =========================================================
 let $FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 nnoremap <leader>f :FZF<CR>
 nnoremap <leader>b :Buffers<CR>
+" }}}2
 
-" ferret
+" ferret config {{{2 ==========================================================
 let g:FerretMap = 0
 nmap <leader>a <Plug>(FerretAck)
 nmap <leader>s <Plug>(FerretAckWord)
+" }}}2
 
-" vim-airline
-let g:airline#extensions#branch#displayed_head_limit = 10 " truncates branch names to 10
+" NERDTree config {{{2 ========================================================
+" Map <leader>n to opening NERDTree
+nnoremap <leader>n :NERDTreeToggle<CR>
 
-" -----------------------------------------------------------------------------
-" -- Misc ---------------------------------------------------------------------
-" -----------------------------------------------------------------------------
+" Open NERDTree when vim starts up on opening a directory
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 
+" Close vim if the only window left open is a NERDTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" }}}2
+
+" coc.nvim config {{{2 ========================================================
+" Show either vim help or call coc doHover
+function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    else
+        call CocAction('doHover')
+    endif
+endfunction
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ "\<TAB>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<c-n>'
+let g:coc_snippet_prev = '<c-p>'
+
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+nnoremap <expr><C-f> coc#util#float_scroll(1)
+nnoremap <expr><C-b> coc#util#float_scroll(0)
+nmap <silent> <C-n> <Plug>(coc-diagnostic-next)
+nmap <silent> <C-p> <Plug>(coc-diagnostic-prev)
+nmap <Leader>cf <Plug>(coc-fix-current)
+nmap <Leader>cn <Plug>(coc-rename)
+nmap gd <Plug>(coc-definition)
+
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+" }}}2
+
+" vimzoom config ==============================================================
+nnoremap <leader>z :Zoom<CR>
+" }}}2
+" }}}
+
+" toggle terminal {{{ =========================================================
 function! ToggleTerm() abort
     if !has('nvim')
         return v:false
@@ -139,7 +193,6 @@ function! ToggleTerm() abort
 endfunction
 
 " Create the 'default' terminal buffer.
-
 function! CreateTerm() abort
     if !has('nvim')
         return v:false
@@ -183,70 +236,27 @@ endfunction
 nnoremap <silent> <A-CR> :call ToggleTerm()<Enter>
 inoremap <silent> <A-CR> <C-\><C-n>:call ToggleTerm()<Enter>
 tnoremap <silent> <A-CR> <C-\><C-n>:call ToggleTerm()<Enter>
+" }}}
 
-" Show either vim help or call coc doHover
-function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
-    else
-        call CocAction('doHover')
-    endif
-endfunction
-
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ "\<TAB>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-let g:coc_snippet_next = '<c-n>'
-let g:coc_snippet_prev = '<c-p>'
-
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-nnoremap <expr><C-f> coc#util#float_scroll(1)
-nnoremap <expr><C-b> coc#util#float_scroll(0)
-nmap <silent> <C-n> <Plug>(coc-diagnostic-next)
-nmap <silent> <C-p> <Plug>(coc-diagnostic-prev)
-nmap <Leader>cf <Plug>(coc-fix-current)
-nmap <Leader>cn <Plug>(coc-rename)
-nmap gd <Plug>(coc-definition)
-
-if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
-
-" git-gutter uses the sign gutter
-set signcolumn=yes
-
-" Use <Leader>c for ciw with repeatability
-nnoremap <silent> <Leader>c :let @/=expand('<cword>')<cr>cgn
-
-" Run macro over visual selection
+" Run macro over visual selection {{{ =========================================
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 
 function! ExecuteMacroOverVisualRange()
   echo "@".getcmdline()
   execute ":'<,'>normal @".nr2char(getchar())
 endfunction
+" }}}
 
-" Move lines down/up
+" Move lines down/up {{{ ======================================================
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
 inoremap <C-j> <Esc>:m .+1<CR>==gi
 inoremap <C-k> <Esc>:m .-2<CR>==gi
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
+" }}}
 
-" Unfold all by default
-set foldlevelstart=9
-
-" Close buffer but keep splits
+" Close buffer but keep splits {{{ ============================================
 nnoremap <silent> <leader>d :call CloseBuffer()<cr>
 function! CloseBuffer()
     let curBuf = bufnr('%')
@@ -279,7 +289,9 @@ function! CloseBuffer()
     exe 'bd' . curBuf
     exe 'tabnext ' . curTab
 endfunction
+" }}}
 
+" line numbers {{{ ============================================================
 " relative line numbers in normal mode, absolute line numbers in insert mode
 set number relativenumber
 augroup numbertoggle
@@ -287,19 +299,15 @@ augroup numbertoggle
   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
+" }}}
 
-" Autoread fix
-" au FocusGained,BufEnter * :silent! !
-" au FocusLost,WinLeave * :silent! noautocmd w
+" misc one-liner settings {{{ =================================================
 
-" stop space from moving cursor
-nnoremap <Space> <Nop>
+" Unfold all by default
+set foldlevelstart=9
 
 " live preview of substitute
 set inccommand=split
-
-" Map leader esc to exit terminal mode
-tnoremap <leader><esc> <c-\><c-n>
 
 " use system clipboard for copy paste
 set clipboard=unnamed
@@ -362,20 +370,6 @@ set smartcase
 " show command in bottom bar
 set showcmd
 
-" move vertically by visual line (don't skip wrapped lines)
-nmap j gj
-nmap k gk
-
-" faster write and/or exit
-nnoremap <leader>z :wq<CR>
-nnoremap <leader>w :w<CR>
-
-" make 'Y' yank from cur pos to end of line instead of yanking the whole line
-nnoremap Y y$
-
-" paste on newline (eg. yiw will paste on newline)
-nnoremap <leader>p :pu<CR>
-
 " use filetype-based syntax highlighting, ftplugins, and indentation
 syntax enable
 filetype plugin indent on
@@ -395,13 +389,38 @@ set incsearch
 " highlight matches
 set hlsearch
 
-" turn off search highlighting (using leader cr instead of only cr because
-" cr is needed for completion and in other contexts).
-nnoremap <leader><CR> :nohlsearch<CR>
+" prevent auto-indent by disabling textwidth
+set tw=0
 
 " show whitespace
 set list
 set listchars=tab:>-,trail:~,extends:>,precedes:<
+" }}}
+
+" misc one-liner keybinds {{{ =================================================
+
+" stop space from moving cursor
+nnoremap <Space> <Nop>
+
+" Map leader esc to exit terminal mode
+tnoremap <leader><esc> <c-\><c-n>
+
+" move vertically by visual line (don't skip wrapped lines)
+nmap j gj
+nmap k gk
+
+" faster write
+nnoremap <leader>w :w<CR>
+
+" make 'Y' yank from cur pos to end of line instead of yanking the whole line
+nnoremap Y y$
+
+" paste on newline (eg. yiw will paste on newline)
+nnoremap <leader>p :pu<CR>
+
+" turn off search highlighting (using leader cr instead of only cr because
+" cr is needed for completion and in other contexts).
+nnoremap <leader><CR> :nohlsearch<CR>
 
 " Swap : and ; to make colon commands easier to type
 nnoremap ; :
@@ -415,4 +434,4 @@ vnoremap <C-V>     v
 
 nnoremap H ^
 nnoremap L $
-
+" }}}
