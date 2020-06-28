@@ -1,4 +1,7 @@
-# oh-my-zsh ===================================================================
+# set the fold method for this file
+# vim:foldmethod=marker
+
+# oh-my-zsh {{{ ===============================================================
 if [ -d "$HOME/.oh-my-zsh" ] ; then
     export ZSH="$HOME/.oh-my-zsh"
 
@@ -6,11 +9,13 @@ if [ -d "$HOME/.oh-my-zsh" ] ; then
         source $ZSH/oh-my-zsh.sh
     fi
 fi
+# }}}
 
-# theme =======================================================================
+# theme {{{ ===================================================================
 ZSH_THEME="robbyrussell"
+# }}}
 
-# plugins =====================================================================
+# plugins {{{ =================================================================
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -19,20 +24,24 @@ plugins=(
     git
     vi-mode
 )
+# }}}
 
-# prompt ======================================================================
+# prompt {{{ ==================================================================
 PROMPT='%2~ # '
+# }}}
 
-# tmux pane rename ============================================================
+# tmux pane rename {{{ ========================================================
 function renamepane {
     tmux select-pane -T $1
 }
 alias rnp=renamepane
+# }}}
 
-# dotfiles ====================================================================
+# dotfiles {{{ ================================================================
 alias dot='git --git-dir=$HOME/.config/dotfiles/ --work-tree=$HOME'
+# }}}
 
-# git autocomplete (TODO) =====================================================
+# git autocomplete (TODO) {{{ =================================================
 autoload -U compinit
 zstyle ':completion:*' menu select
 zstyle ':completion:*' rehash true
@@ -40,33 +49,24 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zmodload zsh/complist
 compinit
 _comp_options+=(globdots) # Include hidden files in autocomplete:
+# }}}
 
-# set PATH so it includes user's private bin if it exists =====================
+# set PATH so it includes user's private bin if it exists {{{ =================
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
+# }}}
 
-# stop less from storing history ==============================================
+# stop less from storing history {{{ ==========================================
 export LESSHISTFILE=/dev/null
+# }}}
 
-# nvm lazy load ===============================================================
-# Defer initialization of nvm until nvm, node or a node-dependent command is
-# run. Ensure this block is only run once if .bashrc gets sourced multiple times
-# by checking whether __init_nvm is a function.
-if [ -s "$HOME/.nvm/nvm.sh" ] && [ "$(declare -f __init_nvm > /dev/null; echo $?)" = 1 ]; then
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
-  declare -a __node_commands=('nvm' 'node' 'npm' 'yarn' 'gulp' 'grunt' 'webpack' 'nvim')
-  function __init_nvm() {
-    for i in "${__node_commands[@]}"; do unalias $i; done
-    . "$NVM_DIR"/nvm.sh
-    unset __node_commands
-    unset -f __init_nvm
-  }
-  for i in "${__node_commands[@]}"; do alias $i='__init_nvm && '$i; done
-fi
+# fnm (faster nvm) {{{ ========================================================
+export PATH=/home/hb/.fnm:$PATH
+eval "`fnm env --multi`"
+# }}}
 
-# Set vi-mode cursor based on normal/insert mode ==============================
+# Set vi-mode cursor based on normal/insert mode {{{ ==========================
 function _set_cursor() {
     if [[ $TMUX = '' ]]; then
       echo -ne $1
@@ -95,13 +95,9 @@ precmd_functions+=(_set_beam_cursor) #
 zle-line-init() { zle -K viins; _set_beam_cursor }
 zle-line-finish() { _set_block_cursor }
 zle -N zle-line-finish
+# }}}
 
-
-
-
-
-
-# optional default stuff ======================================================
+# optional default stuff {{{ ==================================================
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -184,4 +180,4 @@ zle -N zle-line-finish
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
-
+# }}}
