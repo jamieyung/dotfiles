@@ -98,7 +98,7 @@ set signcolumn=yes
 " }}}2
 
 " fzf.vim config {{{2 =========================================================
-let $FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden -g '!\.git/*' -g '!deps/*'"
+let $FZF_DEFAULT_COMMAND="rg --files --ignore-vcs --hidden -g '!\.git/*' -g '!deps/*'"
 nnoremap <leader>f :Files<CR>
 nnoremap <leader>b :Buffers<CR>
 

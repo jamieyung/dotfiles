@@ -41,16 +41,6 @@ alias rnp=renamepane
 alias dot='git --git-dir=$HOME/.config/dotfiles/ --work-tree=$HOME'
 # }}}
 
-# git autocomplete (TODO) {{{ =================================================
-autoload -U compinit
-zstyle ':completion:*' menu select
-zstyle ':completion:*' rehash true
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-zmodload zsh/complist
-compinit
-_comp_options+=(globdots) # Include hidden files in autocomplete:
-# }}}
-
 # set PATH so it includes user's private bin if it exists {{{ =================
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
