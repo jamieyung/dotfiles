@@ -47,6 +47,27 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 # }}}
 
+# history file {{{ ============================================================
+export HISTFILE=~/.zsh_history
+
+export HISTFILESIZE=1000000000
+export HISTSIZE=1000000000
+
+# add commands to history immediately
+setopt INC_APPEND_HISTORY
+
+export HISTTIMEFORMAT="[%F %T] "
+
+# add timestamp
+setopt EXTENDED_HISTORY
+
+# skip duplicates when searching (eg. with C-r)
+setopt HIST_FIND_NO_DUPS
+
+# don't write duplicates to history file
+setopt HIST_IGNORE_ALL_DUPS
+# }}}
+
 # stop less from storing history {{{ ==========================================
 export LESSHISTFILE=/dev/null
 # }}}
