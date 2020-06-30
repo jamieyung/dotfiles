@@ -37,9 +37,6 @@ Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/fzf', { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-" Multi-file search/replace
-Plug 'wincent/ferret'
-
 " File explorer
 Plug 'preservim/nerdtree'
 
@@ -101,15 +98,28 @@ set signcolumn=yes
 " }}}2
 
 " fzf.vim config {{{2 =========================================================
-let $FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
-nnoremap <leader>f :FZF<CR>
+let $FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden -g '!\.git/*' -g '!deps/*'"
+nnoremap <leader>f :Files<CR>
 nnoremap <leader>b :Buffers<CR>
-" }}}2
 
-" ferret config {{{2 ==========================================================
-let g:FerretMap = 0
-nmap <leader>a <Plug>(FerretAck)
-nmap <leader>s <Plug>(FerretAckWord)
+" Search all
+nnoremap <Leader>a :RG<CR>
+nnoremap <Leader>s yiw:RG <C-r>0<CR>
+
+let s:ignoredFiletypes = ['asset','meta','mat','prefab','unity','physicMaterial','inputactions','png','webp']
+
+function! RipgrepFzf(query, fullscreen)
+    let command_fmt = "rg --column --line-number --no-heading --color=always --smart-case -g '!deps/*'"
+    for type in s:ignoredFiletypes
+        let command_fmt .= " -g '!*." . type . "'"
+    endfor
+    let command_fmt .= ' %s || true'
+    let initial_command = printf(command_fmt, shellescape(a:query))
+    let reload_command = printf(command_fmt, '{q}')
+    let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+    call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 " }}}2
 
 " NERDTree config {{{2 ========================================================
