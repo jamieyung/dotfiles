@@ -1,0 +1,8 @@
+# You can add comments to these files with #
+h       ~/
+u       -
+d       ~/documents
+D       ~/downloads
+m       /mnt
+cf      ~/.config
+sc      ~/.local/bin

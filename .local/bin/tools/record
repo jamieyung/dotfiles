@@ -1,0 +1,11 @@
+#!/bin/bash
+
+read w h x y <<<$(xrectsel | tr '+x' ' ' | awk '{print $1,$2,$3,$4}')
+file="$HOME/documents/captures/$(date -I | sed -e 's/-//g')-$$.ogv"
+
+notify-send "Recording screen"
+
+recordmydesktop -x $x -y $y --width $w --height $h \
+    --no-sound -o $file
+
+notify-send "Screencast saved to $file"

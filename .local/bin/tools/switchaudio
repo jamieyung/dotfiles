@@ -1,0 +1,50 @@
+#! /bin/bash
+
+#Treats pulseaudio sink list to avoid calling pacmd list-sinks twice
+o_pulseaudio=$(pacmd list-sinks| grep -e 'index')
+sinklist=($(echo "$o_pulseaudio" | awk '/index:/{print $NF}' | sort -n))
+ssink=$(echo "$o_pulseaudio" | awk '/\* index:/{print $NF}')
+if [ $VERBOSITY == 1 ]; then
+  echo "Selected sink: $ssink"
+fi
+
+maxindex=$((${#sinklist[@]}-1))
+if [ $VERBOSITY == 1 ]; then
+  echo "Max sink index: $maxindex"
+fi
+
+curindex=-1
+
+for i in "${!sinklist[@]}"; do
+  if [[ "${sinklist[$i]}" = "${ssink}" ]]; then
+    curindex=${i}
+  fi
+done
+if [ $VERBOSITY == 1 ]; then
+  echo "Current sink index: $curindex"
+fi
+
+newindex=$((++curindex))
+if [ "$newindex" -gt "$maxindex" ]; then
+  newindex=0
+fi
+if [ $VERBOSITY == 1 ]; then
+  echo "New sink index: $newindex"
+fi
+newsink=${sinklist[$newindex]}
+if [ $VERBOSITY == 1 ]; then
+  echo "New sink: $newsink"
+fi
+
+$(pacmd set-default-sink $newsink)
+
+#Moves all audio threads to new sink
+inputs=`pactl list sink-inputs short | cut -f 1`
+for i in $inputs; do
+  $(pacmd move-sink-input $i $newsink)
+  if [ $VERBOSITY == 1 ]; then
+    echo "Moved input $i to card with index $newsink"
+  fi
+done
+
+polybar-msg hook audiosink 1

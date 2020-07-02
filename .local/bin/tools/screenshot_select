@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+copysel="Copy selected area"
+record="Record a selected area"
+copywin="Copy the current window"
+savesel="Save a selected area"
+savewin="Save the current window"
+copyall="Copy the whole screen"
+saveall="Save the whole screen"
+case "$(printf \
+"$copysel
+$copywin
+$copyall
+$record
+$savesel
+$savewin
+$saveall" | dmenu -l 7 -i -p "Screenshot which area?")" in
+    $record) record ;;
+    $savesel) maim -s pic-selected-"$(date '+%y%m%d-%H%M-%S').png" ;;
+    $savewin) maim -i "$(xdotool getactivewindow)" pic-window-"$(date '+%y%m%d-%H%M-%S').png" ;;
+    $saveall) maim pic-full-"$(date '+%y%m%d-%H%M-%S').png" ;;
+    $copysel) maim -s | xclip -selection clipboard -t image/png ;;
+    $copywin) maim -i "$(xdotool getactivewindow)" | xclip -selection clipboard -t image/png ;;
+    $copyall) maim | xclip -selection clipboard -t image/png ;;
+esac

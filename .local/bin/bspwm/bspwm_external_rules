@@ -1,0 +1,88 @@
+#! /bin/sh
+
+id=${1?} \
+class=$2
+instance=$3 \
+border= \
+center= \
+desktop= \
+focus= \
+follow= \
+hidden= \
+layer= \
+locked= \
+manage= \
+marked= \
+misc=$4 \
+monitor= \
+node= \
+private= \
+rectangle= \
+split_dir= \
+split_ratio= \
+state= \
+sticky= \
+urgent=;
+
+spotify() {
+    sticky=on
+    rectangle=1914x1074+0+0
+    center=on
+    state=floating
+}
+
+caprine() {
+    sticky=on
+    rectangle=1914x1074+0+0
+    center=on
+    state=floating
+}
+
+signal() {
+    sticky=on
+    rectangle=1914x1074+0+0
+    center=on
+    state=floating
+    bspc subscribe 
+}
+
+discord() {
+    sticky=on
+    rectangle=1914x1074+0+0
+    center=on
+    state=floating
+}
+
+case $instance.$class in
+    (*.Signal) signal;;
+    (*.Spotify) spotify;;
+    (*.caprine) caprine;;
+    (*.Caprine) caprine;;
+    (*.discord) discord;;
+    (.)
+        case $(ps -p "$(xdo pid "$id")" -o comm= 2>/dev/null) in
+            (spotify) spotify;;
+            (discord) discord;;
+        esac;;
+esac;
+
+echo \
+	${border:+"border=$border"} \
+	${center:+"center=$center"} \
+	${desktop:+"desktop=$desktop"} \
+	${focus:+"focus=$focus"} \
+	${follow:+"follow=$follow"} \
+	${hidden:+"hidden=$hidden"} \
+	${layer:+"layer=$layer"} \
+	${locked:+"locked=$locked"} \
+	${manage:+"manage=$manage"} \
+	${marked:+"marked=$marked"} \
+	${monitor:+"monitor=$monitor"} \
+	${node:+"node=$node"} \
+	${private:+"private=$private"} \
+	${rectangle:+"rectangle=$rectangle"} \
+	${split_dir:+"split_dir=$split_dir"} \
+	${split_ratio:+"split_ratio=$split_ratio"} \
+	${state:+"state=$state"} \
+	${sticky:+"sticky=$sticky"} \
+    ${urgent:+"urgent=$urgent"};

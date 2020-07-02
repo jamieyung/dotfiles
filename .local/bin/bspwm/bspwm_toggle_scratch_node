@@ -1,0 +1,17 @@
+#!/bin/bash
+
+[[ -z $1 ]] && exit
+nodeID=$1
+
+currentNode=$(bspc query -n focused -N | tr a-z A-Z)
+echo [[ $currentNode = $nodeID ]]
+if [[ $currentNode = $nodeID ]]; then
+    echo "Current node focused"
+    bspc node $nodeID -g hidden=true
+    # bspc desktop -l tiled
+else
+    echo "Focussing node"
+    echo $nodeID
+    # bspc desktop -l monocle
+    bspc node $nodeID -d focused -g hidden=false -f
+fi

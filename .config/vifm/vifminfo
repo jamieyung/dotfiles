@@ -1,0 +1,105 @@
+# You can edit this file by hand, but it's recommended not to do that.
+
+# Marks:
+
+# Bookmarks:
+
+# TUI:
+ar
+q0
+v2
+ov
+m-1
+l2
+r2
+
+# Left window history (oldest to newest):
+d/home/hb/.config
+	tmux.conf
+23
+d/home/hb
+	.config
+2
+d/home/hb/.config
+	sxhkd
+14
+d/home/hb
+	.tmux
+8
+d/home/hb/.tmux
+	..
+0
+d/home/hb
+	.tmux
+8
+d/home/hb/.tmux
+	plugins
+1
+d/home/hb/.tmux/plugins
+	..
+0
+d/home/hb/.tmux
+	plugins
+1
+d/home/hb
+	.config
+2
+d/home/hb/.config
+	yay
+16
+d/home/hb/.config/yay
+	..
+0
+d/home/hb/.config
+	zsh
+17
+d/home/hb/.config/zsh
+	.zshrc
+3
+d/home/hb
+	..
+0
+
+# Right window history (oldest to newest):
+D/home/hb
+	bleh
+1
+D/home/hb/bleh
+	.config
+1
+D/home/hb/bleh/.config
+	zsh
+6
+D/home/hb
+	..
+0
+D/home
+	hb
+1
+D/
+	home
+4
+D/home/hb
+	.config
+2
+D/home/hb/.config
+	dotfiles
+4
+
+# Command line history (oldest to newest):
+
+# Search history (oldest to newest):
+/fnm
+
+# Prompt history (oldest to newest):
+ptmux.conf
+
+# Local filter history (oldest to newest):
+
+# Registers:
+
+# Directory stack (oldest to newest):
+
+# Trash content:
+t/home/hb/.local/share/vifm/Trash/000_zsh
+	/home/hb/.config/zsh

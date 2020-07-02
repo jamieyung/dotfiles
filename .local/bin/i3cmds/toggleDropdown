@@ -1,0 +1,12 @@
+#!/bin/bash
+program=$1
+name=$2
+[[ ! $program ]] && echo 'No program provided' && exit
+[[ ! $name ]] && echo 'No app name provided' && exit
+
+if $(wmctrl -l | grep -q "dropdown_$name"); then
+  wmctrl -c dropdown_$name
+else
+  $program -T "dropdown_$name"
+fi
+

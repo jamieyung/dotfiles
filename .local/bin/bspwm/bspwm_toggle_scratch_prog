@@ -1,0 +1,53 @@
+#!/bin/bash
+
+[[ -z $1 ]] && exit
+[[ -z $2 ]] && exit
+[[ -z $3 ]] && exit
+appName=$1
+className1=$2
+className2=$3
+
+term=false
+[[ $appName = "st" ]] && term=true
+
+
+echo $appName
+echo $className1
+echo $className2
+if ! >/dev/null pgrep -i $appName || ! wmctrl -lx | grep -q -i $className1.$className2; then
+  # App isn't open
+  echo 'Opening app'
+  # bspc rule -a $className2:$className1 --one-shot hidden=true sticky=true
+  # bspc monitor primary -a $workspaceName
+  # bspwm_dynamic_desktops --df $workspaceName
+  if [[ $windowName = $TERMINAL ]]; then
+      $TERMINAL -T $appName
+  else
+      # bspc desktop -l monocle
+      $appName
+      sleep 2
+      # nodeID=$(wmctrl -lx | awk "/$className1.$className2/ {print toupper(\$1)}")
+      # bspc node $nodeID -g sticky=on
+  fi
+else
+    # App is open
+    nodeID=$(wmctrl -lx | awk "/$className1.$className2/ {print toupper(\$1)}")
+    bspwm_toggle_scratch_node $nodeID
+fi
+
+
+# bspc node 0x02000001 -d focused -g hidden=false -f && bspc desktop -l tiled
+
+# currentNode=$(bspc query -n focused -N)
+# currentWorkspace=$( bspc query -D -d focused --names )
+# if [[ "$currentWorkspace" == "$workspaceName" ]]; then
+#   # If workspace is already focused, switch to the last used workspace
+#   echo 'Leaving app workspace'
+#   bspc desktop -f last
+#   exit
+# fi
+
+# # We know app is running on different workspace
+# echo 'Switching to app workspace'
+# wmctrl -x -a $windowName
+

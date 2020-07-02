@@ -1,0 +1,281 @@
+; vim:ft=dosini
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+[colors]
+black = ${xrdb:color0:#1d2021}
+darkred = ${xrdb:color1:#cc241d}
+darkgreen = ${xrdb:color2:#98971a}
+darkyellow = ${xrdb:color3:#d79921}
+darkblue = ${xrdb:color4:#458588}
+darkmagenta = ${xrdb:color5:#b16286}
+darkcyan = ${xrdb:color6:#689d6a}
+lightgray = ${xrdb:color7:#a89984}
+gray = ${xrdb:color8:#928374}
+red = ${xrdb:color9:#fb4934}
+green = ${xrdb:color10:#b8bb26}
+yellow = ${xrdb:color11:#fabd2f}
+blue = ${xrdb:color12:#83a598}
+magenta = ${xrdb:color13:#d3869b}
+cyan = ${xrdb:color14:#8ec07c}
+white = ${xrdb:color15:#ebdbb2}
+background = ${xrdb:background:#1d2021}
+foreground = ${xrdb:foreground:#ebdbb2}
+
+[bar/default]
+;monitor = ${env:MONITOR:LVDS-1}
+monitor = ${env:MONITOR:DP-0}
+enable-ipc = true
+width = 100%
+height = ${env:HEIGHT:24}
+;offset-x = 1%
+;offset-y = 1%
+;radius = 6.0
+fixed-center = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 3
+line-color = {$xrdb:red}
+
+border-bottom-size = ${env:BORDER:1}
+border-color = ${colors.black}
+
+padding-left = 0
+padding-right = 0
+
+module-margin-left = 1
+module-margin-right = 1
+
+font-0 = ${env:FONT0:mono:pixelsize=11;1}
+font-1 = ${env:FONT1:Symbols Nerd Font:style=1000-em:pixelsize=14;1}
+font-2 = ${env:FONT2:Symbola:pixelsize=9;1}
+
+; Other modules: xkeyboard filesystem xbacklight backlight-acpi cpu memory temperature powermenu weather spotify
+modules-left = bspwm spotify
+modules-center = date
+modules-right = ${env:MODULESR:audiosink volume filesystem memory cpu eth}
+
+tray-position = right
+tray-padding = 0
+
+wm-restack = bspwm
+
+;override-redirect = true
+
+[module/spotify]
+type = custom/script
+interval = 1
+format = <label>
+exec = python $HOME/.local/bin/polybar/spotify_status.py -p ',' -f '{play_pause} {artist}: {song}'
+format-underline = #1db954
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:45:...%
+format-foreground = ${colors.blue}
+
+[module/filesystem]
+type = internal/fs
+interval = 25
+
+mount-0 = /
+mount-1 = /home
+
+label-mounted-underline = ${colors.cyan}
+label-mounted = %mountpoint% %percentage_used%%
+label-unmounted = %mountpoint% not mounted
+label-unmounted-foreground = ${colors.gray}
+
+[module/bspwm]
+type = internal/bspwm
+
+format = <label-state> <label-mode>
+
+label-monitor = %name%
+
+label-focused = %name%
+label-focused-foreground = ${colors.black}
+label-focused-background = ${colors.blue}
+label-focused-underline= ${colors.yellow}
+label-focused-padding = 1
+
+label-occupied = %name%
+label-occupied-underline = ${colors.blue}
+label-occupied-padding = 1
+
+label-urgent = %name%!
+label-urgent-background = ${colors.red}
+label-urgent-padding = 1
+
+label-empty = %name%
+label-empty-foreground = ${colors.lightgray}
+label-empty-padding = 1
+
+[module/xbacklight]
+type = internal/xbacklight
+
+format = <label> <bar>
+label = ﯧ
+
+bar-width = 10
+bar-indicator = |
+bar-indicator-foreground = #ff
+bar-fill = ─
+bar-fill-foreground = #9f78e1
+bar-empty = ─
+bar-empty-foreground = ${colors.gray}
+
+[module/backlight-acpi]
+inherit = module/xbacklight
+type = internal/backlight
+card = intel_backlight
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = " "
+format-underline = ${colors.red}
+label = %percentage:3:3%%
+
+[module/memory]
+format = <bar-used>
+type = internal/memory
+bar-used-foreground-0 = ${colors.green}
+bar-used-foreground-1 = ${colors.darkgreen}
+bar-used-foreground-2 = ${colors.yellow}
+bar-used-foreground-3 = ${colors.red}
+bar-used-indicator =
+bar-used-width = 11
+bar-used-fill =▬
+bar-used-empty =▬
+bar-used-empty-foreground = ${colors.gray}
+interval = 2
+format-prefix = " "
+format-underline = ${colors.cyan}
+label = %gb_free% free
+
+[module/wlan]
+type = internal/network
+interface = ${env:WLAN_INTERFACE:wlp2s0}
+interval = 3.0
+
+format-connected = 直 <label-connected> <ramp-signal>
+format-connected-underline = ${colors.darkmagenta}
+label-connected = %essid%
+
+format-disconnected = <label-disconnected>
+format-disconnected-underline = ${self.format-connected-underline}
+label-disconnected = 睊no wifi
+label-disconnected-foreground = ${colors.gray}
+
+ramp-signal-0 = ${env:RAMP0}
+ramp-signal-1 = ${env:RAMP1}
+ramp-signal-2 = ${env:RAMP2}
+ramp-signal-3 = ${env:RAMP3}
+ramp-signal-4 = ${env:RAMP4}
+
+[module/eth]
+type = internal/network
+interface = enp6s0
+interval = 3.0
+
+format-connected-underline = ${colors.darkgreen}
+format-connected-prefix-foreground = ${colors.gray}
+label-connected = "%{T6}%{T-} %upspeed:8:8% %{T6}%{T-} %downspeed:8:8% "
+
+;format-disconnected =
+format-disconnected = <label-disconnected>
+format-disconnected-underline = ${colors.darkred}
+label-disconnected = %ifname%
+label-disconnected-foreground = ${colors.gray}
+
+[module/date]
+type = internal/date
+interval = 60
+
+date = "%d %b %Y (%a)"
+time = "%I:%M%p"
+
+format-underline = ${colors.blue}
+
+label = %date% %time%
+
+[module/audiosink]
+format= %{T4}<output>
+type = custom/ipc
+hook-0 = polybar_audio_icon
+initial = 1
+test=1
+
+[module/volume]
+module-margin-left = 0
+type = internal/pulseaudio
+
+format-volume = <bar-volume>
+label-volume-foreground = ${root.foreground}
+
+format-muted = <bar-volume>
+format-muted-foreground = ${colors.darkred}
+
+bar-volume-width = 10
+bar-volume-foreground-0 = ${colors.blue}
+bar-volume-foreground-1 = ${colors.blue}
+bar-volume-foreground-2 = ${colors.green}
+bar-volume-foreground-3 = ${colors.green}
+bar-volume-foreground-4 = ${colors.green}
+bar-volume-foreground-5 = ${colors.yellow}
+bar-volume-foreground-6 = ${colors.red}
+bar-volume-gradient = false
+bar-volume-indicator = ▮
+bar-volume-fill = ▬
+bar-volume-empty = ▬
+bar-volume-empty-foreground = ${colors.gray}
+
+[module/powermenu]
+type = custom/menu
+
+format-spacing = 1
+
+label-open = 
+label-open-foreground = ${colors.darkmagenta}
+label-close =  cancel
+label-close-foreground = ${colors.darkmagenta}
+label-separator = |
+label-separator-foreground = ${colors.gray}
+
+menu-0-0 = reboot
+menu-0-0-exec = menu-open-1
+menu-0-1 = power off
+menu-0-1-exec = menu-open-2
+
+menu-1-0 = cancel
+menu-1-0-exec = menu-open-0
+menu-1-1 = reboot
+menu-1-1-exec = sudo reboot
+
+menu-2-0 = power off
+menu-2-0-exec = sudo poweroff
+menu-2-1 = cancel
+menu-2-1-exec = menu-open-0
+
+[settings]
+screenchange-reload = true
+
+[global/wm]
+margin-top = 5

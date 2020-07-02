@@ -1,0 +1,2 @@
+lmc mute
+polybar-msg hook audiosink 1

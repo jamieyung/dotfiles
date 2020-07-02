@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Alias
+_bc() {
+  bspc config "$@"
+}
+
+# If refreshing bspwm, remove all previous rules to prevent doubling up.
+bspc rule -r "*"
+
+{ read mainmonitor ; read secondmonitor ; } <<< $(bspc query --monitors --names)
+
+# Start workspaces on the main monitor.
+bspc monitor $mainmonitor -d 1
+[[ $secondmonitor ]] && bspc monitor $secondmonitor -d 6
+
+# If you want a multi-monitor display or something else, I leave that to you to
+# arrange. I have this sensible default for most people's use cases.
+
+_bc border_width 3
+_bc window_gap 0
+if [[ $HOSTNAME = "xps" ]]; then
+    _bc top_padding 54px
+elif [[ $HOSTNAME = "grill" ]]; then
+    _bc top_padding 25px
+fi
+_bc borderless_monocle   true
+_bc focus_follows_pointer false
+_bc active_border_color '#707880'
+_bc normal_border_color '#282a2e'
+_bc focused_border_color '#81a2be'
+_bc ignore_ewmh_fullscreen all
+
+[[ -f $HOME/.config/polybar/launch.sh ]] && $HOME/.config/polybar/launch.sh
+[[ -f $HOME/.local/bin/bspwm/bspwm_external_rules ]] && bspc config external_rules_command "$(which bspwm_external_rules)"

@@ -1,0 +1,26 @@
+#!/bin/bash
+# TODO improve documentation and review
+
+# Resizes (expands or contracts) the selected node in the given
+# direction.  This is assigned to a key binding in $HOME/.config/sxhkd/sxhkdrc
+
+direction=$1
+nodeState=$(bspc query -T -n | jq -r '.client.state')
+
+if [ $nodeState = "floating" ]; then
+    # Move floating window in given direction
+    case "$direction" in
+        west) bspc node -v -20 0
+        ;;
+        east) bspc node -v 20, 0
+        ;;
+        north) bspc node -v 0, -20
+        ;;
+        south) bspc node -v 0, 20
+        ;;
+    esac
+else
+    bspc node -s $direction.local --follow || bspc node -m $direction --follow
+fi
+
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+# Strip quotes from either one line of piped data or first argument
+if [ -p /dev/stdin ]; then
+  read -t 1 line
+  sed -e 's/^"//' -e 's/"$//' <<< $line
+elif [ $1 ]; then
+  sed -e 's/^"//' -e 's/"$//' <<< $1
+else
+  exit
+fi
+

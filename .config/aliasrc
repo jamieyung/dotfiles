@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+alias ka="killall" \
+  p="pacman -Sl --color=always | awk '{print \$2\" \"\$3\" \"\$4\" \"\$5}' | fzf --ansi -m --preview 'pacman -Si {1}' | awk '{print \$1}' | xargs -r sudo pacman --noconfirm -S" \
+  pr="pacman -Qett --color=always | fzf --ansi -m --preview 'yay -Si {1}' | awk '{print \$1}' | xargs -r sudo pacman --noconfirm -Rncs" \
+  pm="sudo pacman" \
+  SS="sudo systemctl" \
+  g="git" \
+  e="$EDITOR" \
+  v="$EDITOR" \
+  sdn="sudo shutdown -h now" \
+  ls="ls -hN --color=auto --group-directories-first" \
+  grep="rg" \
+  diff="diff --color=auto" \
+  ccat="highlight --out-format=ansi" \
+  ref="shortcuts >/dev/null; source ~/.config/shortcutrc" \
+  lsp="pacman -Qett --color=always | less" \
+  mkdir='mkdir -pv' \
+  dot='git --git-dir=$HOME/.config/dotfiles --work-tree=$HOME' \
+  y="yay -Sl --color=always | awk '{print \$2\" \"\$3\" \"\$4\" \"\$5}' | fzf --ansi -m --preview 'yay -Si {1}' | awk '{print \$1}' | xargs -r sudo yay --noconfirm -S" \
+  yr="yay -Qett --color=always | fzf --ansi -m --preview 'yay -Si {1}' | awk '{print \$1}' | xargs -r sudo yay --noconfirm -Rncs" \
+
+command -v nvim >/dev/null && alias vim="nvim" vimdiff="nvim -d" # Use neovim for vim if present.
+
+vf() { fzf | xargs -r -I % $EDITOR % ;}
