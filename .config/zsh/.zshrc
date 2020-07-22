@@ -133,3 +133,7 @@ function renamepane {
 alias rnp=renamepane
 # }}}
 
+test -r $HOME/.opam/opam-init/init.zsh && . $HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+
+# openframeworks project generator libs
+export PG_OF_PATH=~/progs/of_v20200712_linux64gcc6_release
