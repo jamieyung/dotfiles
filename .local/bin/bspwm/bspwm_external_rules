@@ -31,6 +31,12 @@ spotify() {
     state=floating
 }
 
+calculator() {
+    sticky=on
+    center=on
+    state=floating
+}
+
 caprine() {
     sticky=on
     rectangle=1914x1074+0+0
@@ -55,6 +61,7 @@ discord() {
 
 case $instance.$class in
     (*.Signal) signal;;
+    (*.Calculator) calculator;;
     (*.Spotify) spotify;;
     (*.caprine) caprine;;
     (*.Caprine) caprine;;

@@ -6,16 +6,29 @@
 
 size=${2:-'10'}
 direction=$1
+nodeState=$(bspc query -T -n | jq -r '.client.state')
 
 # Switch with window in given direction
-case "$direction" in
-    west) bspc node @west -r -"$size" || bspc node @east -r -"$size"
-    ;;
-    east) bspc node @west -r +"$size" || bspc node @east -r +"$size"
-    ;;
-    north) bspc node @south -r -"$size" || bspc node @north -r -"$size"
-    ;;
-    south) bspc node @south -r +"$size" || bspc node @north -r +"$size"
-    ;;
-esac
-
+if [ $nodeState = "floating" ]; then
+    case "$direction" in
+        west) bspc node -z right -"$size" 0
+            ;;
+        east) bspc node -z right +"$size" 0
+            ;;
+        north) bspc node -z top 0 -"$size"
+            ;;
+        south) bspc node -z top 0 +"$size"
+            ;;
+    esac
+else
+    case "$direction" in
+        west) bspc node @west -r -"$size" || bspc node @east -r -"$size"
+            ;;
+        east) bspc node @west -r +"$size" || bspc node @east -r +"$size"
+            ;;
+        north) bspc node @south -r -"$size" || bspc node @north -r -"$size"
+            ;;
+        south) bspc node @south -r +"$size" || bspc node @north -r +"$size"
+            ;;
+    esac
+fi
