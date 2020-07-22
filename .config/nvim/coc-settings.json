@@ -1,9 +1,32 @@
 {
     "coc.source.file.ignoreHidden": false,
     "languageserver": {
+        "ccls": {
+            "command": "ccls",
+            "filetypes": ["c", "cpp", "objc", "objcpp" ],
+            "rootPatterns": [
+                ".ccls",
+                "compile_commands.json",
+                ".vim/",
+                ".git/"
+            ],
+            "initializationOptions": {
+                "cache": {
+                    "directory": "/tmp/ccls"
+                }
+            }
+        },
+        "elmLS": {
+            "command": "elm-language-server",
+            "filetypes": ["elm"],
+            "rootPatterns": ["elm.json"],
+            "initializationOptions": {
+                "elmAnalyseTrigger": "change"
+            }
+        },
         "haxe": {
             "command": "node",
-            "args": ["/mnt/c/Users/hb/.vscode/extensions/nadako.vshaxe-2.20.3/bin/server.js"],
+            "args": ["/home/hb/progs/haxe-language-server/bin/server.js"],
             "filetypes": ["haxe"],
             "trace.server": "verbose",
             "initializationOptions": {
