@@ -58,8 +58,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Haxe
 Plug 'jdonaldson/vaxe'
 
-Plug 'yannick-cw/vimzoom'
-
 call plug#end()
 "}}}2
 
@@ -127,11 +125,14 @@ command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 nnoremap <leader>n :NERDTreeToggle<CR>
 
 " Open NERDTree when vim starts up on opening a directory
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+augroup NERDTree
+    autocmd!
+    autocmd StdinReadPre * let s:std_in=1
+    autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 
-" Close vim if the only window left open is a NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+    " Close vim if the only window left open is a NERDTree
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+augroup END
 " }}}2
 
 " coc.nvim config {{{2 ========================================================
@@ -171,10 +172,6 @@ if exists('*complete_info')
 else
   imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
-" }}}2
-
-" vimzoom config {{{ ==========================================================
-nnoremap <leader>z :Zoom<CR>
 " }}}2
 " }}}
 
@@ -301,6 +298,20 @@ function! CloseBuffer()
 endfunction
 " }}}
 
+" sxhkdrc refresh {{{ =========================================================
+augroup sxhkdrc
+    autocmd!
+    au BufWritePost *sxhkdrc !pkill -USR1 sxhkd
+augroup END
+" }}}
+
+" source vimrc on save {{{ ====================================================
+augroup source_vimrc_on_save
+    autocmd!
+    au BufWritePost $MYVIMRC source $MYVIMRC | nohl | redraw
+augroup END
+" }}}
+
 " line numbers {{{ ============================================================
 " relative line numbers in normal mode, absolute line numbers in insert mode
 set number relativenumber
@@ -320,10 +331,13 @@ set foldlevelstart=9
 set inccommand=split
 
 " use system clipboard for copy paste
-set clipboard=unnamed
+set clipboard+=unnamedplus
 
 " sets cursor back to solid block on exiting vim
-au VimLeave * set guicursor=a:block-blinkon0
+augroup VimLeave
+    autocmd!
+    au VimLeave * set guicursor=a:block-blinkon0
+augroup END
 
 set hidden
 
