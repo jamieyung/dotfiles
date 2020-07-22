@@ -1,6 +1,6 @@
 # Close node
-super + q
-  bspc node -c
+super + {_, shift + }q
+  bspc node -{c,k}
 # Select node in direction
 super + {h,j,k,l}
   bspc node -f {west,south,north,east}
@@ -14,9 +14,12 @@ super + shift + {y,u,i,o}
 # Swap current window with the biggest one in the present desktop
 super + shift + b
   bspc node -s biggest.local
-# Quit/restart bspwm
-super + shift + {q,r}
-  {bspwm_close,bspc wm -r}
+# Restart bspwm
+super + shift + r
+  bspc wm -r
+# Rotate orientation
+super + o
+  bspc node @parent -R 90
 # Toggle between most recent workspaces
 super + Tab
   bspwm_dynamic_desktops --df $(bspc query -D -d --names)
@@ -28,6 +31,8 @@ super + {_,shift + ,ctrl + shift +,ctrl +}{0-9}
   ;bspwm_dynamic_desktops {--df,--ns,--nm,--da} {0-9}
 
 # Basic binds
+XF86Calculator
+  bspwm_toggle_scratch_prog "liri-calculator" "io.liri.Calculator" "Calculator"
 super + Return
   $TERMINAL
 super + shift + Return

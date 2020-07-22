@@ -192,7 +192,7 @@ ramp-signal-4 = ${env:RAMP4}
 
 [module/eth]
 type = internal/network
-interface = enp6s0
+interface = enp3s0
 interval = 3.0
 
 format-connected-underline = ${colors.darkgreen}
