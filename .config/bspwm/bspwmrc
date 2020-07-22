@@ -17,7 +17,10 @@ bspc monitor $mainmonitor -d 1
 # If you want a multi-monitor display or something else, I leave that to you to
 # arrange. I have this sensible default for most people's use cases.
 
-_bc border_width 3
+_bc pointer_modifier mod4
+_bc pointer_action1 move
+_bc pointer_action2 resize_corner
+_bc border_width 5
 _bc window_gap 0
 if [[ $HOSTNAME = "xps" ]]; then
     _bc top_padding 54px
@@ -28,7 +31,7 @@ _bc borderless_monocle   true
 _bc focus_follows_pointer false
 _bc active_border_color '#707880'
 _bc normal_border_color '#282a2e'
-_bc focused_border_color '#81a2be'
+_bc focused_border_color '#00ff00'
 _bc ignore_ewmh_fullscreen all
 
 [[ -f $HOME/.config/polybar/launch.sh ]] && $HOME/.config/polybar/launch.sh
