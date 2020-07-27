@@ -8,6 +8,7 @@
 .bash_logout
 .cache
 .cargo/
+.cmake/
 .config/CastleDB/
 .config/GIMP/
 .config/Liri/
@@ -21,6 +22,7 @@
 .config/dmenuhist
 .config/dotfiles/
 .config/expressvpn/
+.config/flowblade/
 .config/fnm/
 .config/gnupg/
 .config/google-chrome/
@@ -49,6 +51,7 @@
 .elm/
 .fnm/
 .gnome/
+.gnome2/
 .gtk-recordmydesktop
 .haxelib
 .java
