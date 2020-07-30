@@ -32,6 +32,7 @@
 .config/kcachegrindrc
 .config/kdbgrc
 .config/kdeglobals
+.config/kdenliverc
 .config/menus/
 .config/mimeapps.list
 .config/nsc-pyrus-server/
@@ -43,8 +44,10 @@
 .config/nvim/undodir/
 .config/nwjs/
 .config/pulse/
+.config/shortcutrc
 .config/spotify/
 .config/vifm/vifminfo
+.config/vifm/vifmshortcuts
 .config/zsh/zsh_history
 .duc.db/
 .elm-analyse/

@@ -228,6 +228,13 @@ function! CloseBuffer()
 endfunction
 " }}}
 
+" refresh shortcuts on save {{{ ===============================================
+augroup refresh_shortcuts_on_save
+    autocmd!
+    au BufWritePost ~/.config/bmdirs,~/.config/bmfiles !shortcuts
+augroup END
+" }}}
+
 " sxhkdrc refresh {{{ =========================================================
 augroup sxhkdrc
     autocmd!

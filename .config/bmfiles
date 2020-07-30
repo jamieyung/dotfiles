@@ -1,9 +1,10 @@
-bf      ${XDG_CONFIG_HOME:-$HOME/.config}/bmfiles
 bd      ${XDG_CONFIG_HOME:-$HOME/.config}/bmdirs
+bf      ${XDG_CONFIG_HOME:-$HOME/.config}/bmfiles
 cfa     ${XDG_CONFIG_HOME:-$HOME/.config}/aliasrc
-cfz     $ZDOTDIR/.zshrc
-cfp     $ZDOTDIR/.zprofile
 cfe     ~/.zshenv
+cfk     ${XDG_CONFIG_HOME:-$HOME/.config}/sxhkd/sxhkdrc
+cfp     $ZDOTDIR/.zprofile
+cft     ${XDG_CONFIG_HOME:-$HOME/.config}/tmux.conf
 cfv     ${XDG_CONFIG_HOME:-$HOME/.config}/nvim/init.vim
 cfx     ${XDG_CONFIG_HOME:-$HOME/.config}/Xresources
-cfk     ${XDG_CONFIG_HOME:-$HOME/.config}/sxhkd/sxhkdrc
+cfz     $ZDOTDIR/.zshrc
