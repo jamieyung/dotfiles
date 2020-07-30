@@ -1,26 +1,66 @@
 #!/usr/bin/env sh
+# POSIX
 
 # set the fold method for this file
 # vim:foldmethod=marker
 
 # Variables {{{ ===============================================================
 
-if [ -z "$1" ]; then
-    buffer_id="scratchterm"
-else
-    buffer_id=$1
-fi
+die() {
+    printf '%s\n' "$1" >&2
+    exit 1
+}
 
-if [ ! -z "$2" ]; then
-    run_cmd=$2
-fi
+# initialize variables with defaults
+buffer_id="scratchterm"
+run_cmd=
+force_single=0
+
+while :; do
+    case $1 in
+        -b|--bufferid)
+            if [ "$2" ]; then
+                buffer_id=$2
+                shift
+            else
+                die 'ERROR: "--bufferid" requires a non-empty option argument.'
+            fi
+            ;;
+
+        -c|--runcmd)
+            if [ "$2" ]; then
+                run_cmd=$2
+                shift
+            else
+                die 'ERROR: "--runcmd" requires a non-empty option argument.'
+            fi
+            ;;
+
+        -s|--force-single)
+            force_single=1
+            ;;
+
+        --) # end of all options
+            shift
+            break
+            ;;
+        -?*)
+            printf 'WARN: Unknown option (ignored): %s\n' "$1" >&2
+            ;;
+        *)
+            break
+    esac
+
+    shift
+done
 
 current_session_name=$(tmux display-message -p '#{session_name}')
 current_window_id=$(tmux display-message -p '#{window_id}')
 current_pane_title=$(tmux display-message -p '#{pane_title}')
 current_pane_id=$(tmux display-message -p '#{pane_id}')
 scratch_session_name="scratch"
-scratch_pane_name="(session:$current_session_name)___(window:$current_window_id)___(buffer_id:$buffer_id)"
+scratch_pane_name_bookend="~~~"
+scratch_pane_name="$scratch_pane_name_bookend(session:$current_session_name)___(window:$current_window_id)___(buffer_id:$buffer_id)$scratch_pane_name_bookend"
 #}}}
 
 # Helper functions {{{ ========================================================
@@ -28,8 +68,7 @@ scratch_pane_name="(session:$current_session_name)___(window:$current_window_id)
 # Searches for the pane with name $scratch_pane_name and echoes info about that
 # pane. Args: $1 is the session to look in, $2 is the format for the output
 # info.
-get_info_about_scratch_pane()
-{
+get_info_about_scratch_pane() {
     echo $(tmux list-panes -s -t $1 -F"$2" | grep $scratch_pane_name | awk '{print $2; exit}')
 }
 #}}}
@@ -50,11 +89,26 @@ fi
 [ $current_session_name = $scratch_session_name ] && exit
 #}}}
 
+# If forcing single scratch buf, send away others {{{ =========================
+if [ $force_single = 1 ]; then
+    scratch_pane_id=$(get_info_about_scratch_pane $current_session_name "#{pane_title} #{pane_id}")
+    pane_ids=$(tmux list-panes -s -t $current_session_name -F"#{pane_title} #{pane_id}" | grep $scratch_pane_name_bookend | awk '{print $2}')
+    for pane_id in $pane_ids; do
+        if [ $pane_id = $scratch_pane_id ]; then
+            echo "Target pane already here, not sending it away"
+        else
+            echo "Sending away other pane $pane_id"
+            tmux break-pane -s $pane_id -t $scratch_session_name:
+        fi
+    done
+fi
+#}}}
+
 # Situation 1: scratch pane currently focused {{{ =============================
 if [ $current_pane_title = $scratch_pane_name ]; then
-    echo "Scratch pane is focused, send it back to scratch session"
     scratch_pane_id=$current_pane_id
     if [ -z "$run_cmd" ]; then
+        echo "Scratch pane is focused, send it back to scratch session"
         tmux break-pane -s $current_pane_id -t $scratch_session_name:
     fi
 #}}}
@@ -90,6 +144,7 @@ fi
 
 # Run command (if one was given) {{{ ==========================================
 if [ ! -z "$run_cmd" ]; then
+    echo "Executing run cmd"
     tmux send-keys -t "$scratch_pane_id" "$run_cmd" Enter
 fi
 #}}}
