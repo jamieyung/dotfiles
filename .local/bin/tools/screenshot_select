@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 copysel="Copy selected area"
 record="Record a selected area"
+record_square="Record a selected square area (controlled by width)"
 copywin="Copy the current window"
 savesel="Save a selected area"
 savewin="Save the current window"
@@ -11,10 +12,12 @@ case "$(printf \
 $copywin
 $copyall
 $record
+$record_square
 $savesel
 $savewin
 $saveall" | dmenu -l 7 -i -p "Screenshot which area?")" in
     $record) record ;;
+    $record_square) record_square ;;
     $savesel) maim -s pic-selected-"$(date '+%y%m%d-%H%M-%S').png" ;;
     $savewin) maim -i "$(xdotool getactivewindow)" pic-window-"$(date '+%y%m%d-%H%M-%S').png" ;;
     $saveall) maim pic-full-"$(date '+%y%m%d-%H%M-%S').png" ;;
