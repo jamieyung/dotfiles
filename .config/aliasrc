@@ -1,0 +1,45 @@
+#!/usr/bin/env sh
+
+# vim:foldmethod=marker
+
+alias e="$EDITOR"
+
+# config {{{
+alias cf="e $HOME/.config"
+alias cfa="e $HOME/.config/aliasrc"
+alias cfga="e $HOME/.gitalias"
+alias cft="e $HOME/.config/tmux.conf"
+alias cfv="e $HOME/.config/nvim"
+alias cfz="e $HOME/.config/zsh/.zshrc"
+# }}}
+
+# git (relies on existence of ~/.gitalias) {{{
+alias lg="lazygit"
+
+alias ga="git a"
+alias gb="git b"
+alias gc="git c"
+alias gco="git co"
+alias gd="git d"
+alias gds="git ds"
+alias gf="git f"
+alias gl="git log --graph --pretty=format:'%C(auto)%h%d%Creset %C(cyan)%ad%Creset %s' --date=short"
+alias gll="git log --graph --pretty=format:'%C(auto)%h%d%Creset %C(cyan)%ad%Creset %C(green)%cn <%ce>%Creset %s'"
+alias gla="gl --all"
+alias gp="git p"
+alias gpu="git push"
+alias gpub="git publish"
+alias gs="git s"
+alias gbprune="git branch | grep -v "main" | xargs git branch -d"
+# }}}
+
+# misc {{{
+alias cw="cd $HOME/workspace"
+alias l="exa --all --all --long --classify --group-directories-first --octal-permissions --no-permissions"
+alias tm="tmux -f $HOME/.config/tmux.conf new -A -s default"
+alias dps="docker ps"
+# }}}
+
+# use neovim for vim if present
+command -v nvim >/dev/null && alias vim="nvim" vimdiff="nvim -d"
+

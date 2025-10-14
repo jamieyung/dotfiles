@@ -1,0 +1,8 @@
+[include]
+	path = /Users/jamie/.gitalias
+[core]
+	excludesfile = /Users/jamie/.gitignore_global
+[pull]
+	rebase = false
+[init]
+	defaultBranch = main
