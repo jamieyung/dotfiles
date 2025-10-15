@@ -11,7 +11,6 @@ return {
     "olimorris/onedarkpro.nvim",
     "rust-lang/rust.vim",
     "sainnhe/everforest",
-    "SirVer/ultisnips",
     "tpope/vim-commentary",
     "tpope/vim-repeat",
     "tpope/vim-surround",
