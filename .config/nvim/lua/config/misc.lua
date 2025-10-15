@@ -49,3 +49,6 @@ vnoremap <C-V>     v
 nnoremap H ^
 nnoremap L $
 ]])
+
+-- pcall to avoid crashing if the colorscheme isn't installed
+pcall(vim.cmd, 'colorscheme catppuccin-frappe')
